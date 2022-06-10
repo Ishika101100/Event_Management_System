@@ -18,8 +18,7 @@ class User(db.Model, UserMixin):
     gender=db.Column(db.String(10),nullable=False)
     age=db.Column(db.Integer,nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    mobile_number=db.Column(db.String(10),nullable=False)
-    address=db.Column(db.TEXT,nullable=False)
+    mobile_number=db.Column(db.String(12),nullable=False)
 
     def get_reset_token(self,expires_sec=1800):
         s = Serializer(current_app.config['SECRET_KEY'],expires_sec)
