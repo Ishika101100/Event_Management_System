@@ -12,7 +12,7 @@ class RegistrationForm(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
-    mobile_no = StringField('Mobile Number', validators=[DataRequired(), Length(10)])
+    mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(10)])
     gender = RadioField('Gender', choices=[('M', 'Male'), ('F', 'Female')])
     address = TextAreaField("Address")
     age = IntegerField("Age")
