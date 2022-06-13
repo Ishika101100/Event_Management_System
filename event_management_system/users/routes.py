@@ -47,18 +47,14 @@ def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
-
-# def save_picture(form_picture):
-#     random_hex = secrets.token_hex(8)
-#     _, f_ext = os.path.splitext(form_picture.filename)
-#     picture_fn = random_hex + f_ext
-#     picture_path = os.path.join(app.root_path, '../static/profile_pics', picture_fn)
-#     output_size = (125, 125)
-#     i = Image.open(form_picture)
-#     i.thumbnail(output_size)
-#     i.save(picture_path)
-#
-#     return picture_fn
+@users.route("/admin")
+def admin():
+    id=current_user.id
+    if id == 2:
+        return render_template("admin.html")
+    else:
+        flash("Only Admin can access this page")
+        return redirect(url_for('main.home'))
 
 
 @users.route("/account", methods=['GET', 'POST'])
@@ -81,18 +77,6 @@ def account():
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
 
-
-# def send_reset_email(user):
-#     token = user.get_reset_token()
-#     msg = Message('Password Reset Request',
-#                   sender='noreply@demo.com',
-#                   recipients=[user.email])
-#     msg.body = f'''To reset your password, visit the following link:{url_for('reset_token', token=token, _external=True)}
-# If you did not make this request then simply ignore this email and no changes will be made.
-# '''
-#
-#     # print(f"============{msg}==================")
-#     mail.send(msg)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
