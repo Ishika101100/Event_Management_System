@@ -48,6 +48,7 @@ def logout():
     return redirect(url_for('main.home'))
 
 @users.route("/admin")
+@login_required
 def admin():
     id=current_user.id
     if id == 2:
