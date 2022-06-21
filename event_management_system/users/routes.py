@@ -1,12 +1,14 @@
-from flask import render_template, url_for, flash, redirect, request,Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint
 from event_management_system import db, bcrypt
-from event_management_system.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
-from event_management_system.models import User
+from event_management_system.users.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, \
+    ResetPasswordForm, ChangePasswordForm
+from event_management_system.models import User, UserType, EventCategory, Venues
 from flask_login import login_user, current_user, logout_user, login_required
 
 from event_management_system.users.utils import send_reset_email, save_picture
 
 users = Blueprint('users', __name__)
+
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
@@ -14,16 +16,28 @@ def register():
         return redirect(url_for('main.home'))
 
     form = RegistrationForm()
+    get_user_type = UserType.query.all()
+    get_venue_type = EventCategory.query.all()
+    # print(get_user_type)
+
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password,
-                    mobile_number=form.mobile_number.data, age=form.age.data, address=form.address.data,
-                    gender=form.gender.data)
+        user = User(username=form.username.data, user_type=form.user_type.data, email=form.email.data,
+                    password=hashed_password,
+                    mobile_number=form.mobile_number.data, address=form.address.data)
+        print(form.user_type.data)
+        print(request.form.get('user_type'))
+        #print(user.id)
         db.session.add(user)
         db.session.commit()
-        flash('Your account has been created! You are now able to log in', 'success')
+        if user.user_type == 2:
+            venue = Venues(venue_type=form.venue_type.data, user_id=user.id)
+            db.session.add(venue)
+            db.session.commit()
+            flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form, get_user_type=get_user_type,
+                           get_venue_type=get_venue_type)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -47,16 +61,6 @@ def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
-@users.route("/admin")
-@login_required
-def admin():
-    id=current_user.id
-    if id == 2:
-        return render_template("admin.html")
-    else:
-        flash("Only Admin can access this page")
-        return redirect(url_for('main.home'))
-
 
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -73,11 +77,11 @@ def account():
         return redirect(url_for('users.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
-        form.email.data = current_user.email
+        form.mobile_number.data = current_user.mobile_number
+        form.address.data=current_user.address
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
                            image_file=image_file, form=form)
-
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
@@ -92,13 +96,28 @@ def reset_request():
         return redirect(url_for('users.login'))
     return render_template('reset_request.html', title='Reset Password', form=form)
 
+@users.route("/change_password",methods=['GET','POST'])
+@login_required
+def change_password():
+    form=ChangePasswordForm()
+    if form.validate_on_submit():
+        if bcrypt.check_password_hash(current_user.password, form.old_password.data):
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            current_user.password = hashed_password
+            db.session.commit()
+            logout()
+            flash("Password Changed Successfully! Please login again!", 'success')
+            return redirect(url_for('users.login'))
+        else:
+            flash("Incorrect Old Password",'danger')
+    return render_template('change_password.html', title='Change Password', form=form)
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
-    if user is None:
+    if not user:
         flash('That is an invalid or expired token', 'warning')
         return redirect(url_for('users.reset_request'))
     form = ResetPasswordForm()

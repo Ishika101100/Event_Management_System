@@ -1,5 +1,5 @@
-from flask import render_template, request, Blueprint
-from flask_login import login_required
+from flask import render_template, request, Blueprint, redirect, url_for, flash
+from flask_login import login_required, current_user
 
 main = Blueprint('main', __name__)
 
@@ -15,16 +15,19 @@ def about():
     return render_template('about.html', title='About')
 
 
-@main.route("/book_event")
-@login_required
-def book_event():
-    return render_template('book_event.html', title='Book Event')
-
+# @main.route("/book_event")
+# @login_required
+# def book_event():
+#     return render_template('book_event.html', title='Book Event')
 
 @main.route("/get_bill")
 @login_required
 def get_bill():
-    return render_template('get_bill.html', title='Get Bill')
+    if current_user.user_type == 1:
+        return render_template('get_bill.html')
+    else:
+        flash("Only users can access this page")
+        return redirect(url_for('main.home'))
 
 
 @main.route("/contact")

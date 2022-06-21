@@ -1,8 +1,10 @@
 import os
+import re
 import secrets
 from PIL import Image
 from flask import url_for, current_app
 from flask_mail import Message
+from wtforms import ValidationError
 from event_management_system import mail
 
 
@@ -32,3 +34,20 @@ If you did not make this request then simply ignore this email and no changes wi
 '''
     mail.send(msg)
 
+
+def phone_number_validation(self, field):
+    if field.data.isnumeric():
+        regex = r'[7-9][0-9]{9}'
+        if not (re.fullmatch(regex, field.data)):
+            raise ValidationError("Invalid phone number")
+
+
+def age_validation(self, field):
+    if not field.data > 13:
+        raise ValidationError("Age must be greater than 13")
+
+
+def password_validation(self,field):
+    regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$'
+    if not re.fullmatch(regex, field.data):
+        raise ValidationError("Password should consist One Capital Letter,Special Character,One Number,Length 8-18")

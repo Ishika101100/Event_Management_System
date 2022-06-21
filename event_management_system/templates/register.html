@@ -19,6 +19,26 @@
                         {{ form.username(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+
+                <div class="form-group">
+                    <label for="user_type"> Register As:</label>
+                    <SELECT name="user_type" id="user_type">
+                        {% for i in get_user_type %}
+                            <option value={{ i.id }}>{{ i.user_type }}</option>
+                        {% endfor %}
+                    </SELECT>
+                </div>
+
+                <div class="form-group" id="venue_location_div" style="display:none">
+                  <label for="event_category"> Venue Ideal For:</label>
+                    <SELECT name="event_category">
+                        {% for j in get_venue_type %}
+                            <option value={{ j.id }}>{{ j.name }}</option>
+                        {% endfor %}
+                    </SELECT>
+                </div>
+
+
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
                     {% if form.email.errors %}
@@ -61,34 +81,6 @@
                     {% endif %}
                 </div>
 
-                <div class="form-group">
-                    {{ form.age.label(class="form-control-label") }}
-                    {% if form.age.errors %}
-                        {{ form.age(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.age.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.age(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    {{ form.gender.label(class="form-control-label") }}
-                    {% if form.gender.errors %}
-                        {{ form.gender(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.gender.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.gender(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
 
                 <div class="form-group">
                     {{ form.password.label(class="form-control-label") }}
@@ -128,3 +120,6 @@
         </small>
     </div>
 {% endblock content %}
+{% block jquery %}
+<script src="{{ url_for('static', filename="js/register.js") }}"></script>
+{% endblock jquery %}

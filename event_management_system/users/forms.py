@@ -1,22 +1,23 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField, TextAreaField, IntegerField, \
-    FormField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, RadioField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from event_management_system.models import User
+from event_management_system.users.utils import phone_number_validation, age_validation, password_validation
 
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
+    user_type = StringField('user_type', validators=[DataRequired()])
+    venue_type = StringField('venue_type')
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
-    mobile_number = StringField('Mobile Number', validators=[DataRequired(), Length(10)])
-    gender = RadioField('Gender', choices=[('M', 'Male'), ('F', 'Female')])
+    mobile_number = StringField('Mobile Number',
+                                validators=[DataRequired(), Length(min=10, max=10), phone_number_validation])
     address = TextAreaField("Address")
-    age = IntegerField("Age")
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(), password_validation])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
 
@@ -32,6 +33,11 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError('That email is taken. Please choose a different one.')
 
+    def validate_number(self, mobile_number):
+        user = User.query.filter_by(mobile_number=mobile_number.data).first()
+        if user:
+            raise ValidationError('That mobile_number is taken. Please choose a different one.')
+
 
 class LoginForm(FlaskForm):
     email = StringField('Email',
@@ -44,9 +50,11 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+    mobile_number = StringField('Mobile Number',
+                        validators=[DataRequired(),phone_number_validation])
+    address = TextAreaField("Address")
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    change_Password = SubmitField('Change Password')
     submit = SubmitField('Update')
 
     def validate_username(self, username):
@@ -55,11 +63,13 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('That username is taken. Please choose a different one.')
 
-    def validate_email(self, email):
-        if email.data != current_user.email:
-            user = User.query.filter_by(email=email.data).first()
+    def validate_number(self, mobile_number):
+        if mobile_number.data != current_user.mobile_number:
+            user = User.query.filter_by(mobile_number=mobile_number.data).first()
             if user:
-                raise ValidationError('That email is taken. Please choose a different one.')
+                raise ValidationError('That mobile_number is taken. Please choose a different one.')
+
+
 
 
 class RequestResetForm(FlaskForm):
@@ -74,7 +84,15 @@ class RequestResetForm(FlaskForm):
 
 
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired(),password_validation])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset Password')
+
+
+class ChangePasswordForm(FlaskForm):
+    old_password=PasswordField('Old Password')
+    password = PasswordField('Password', validators=[DataRequired(),password_validation])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Change Password')
