@@ -1,8 +1,9 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+
 from event_management_system.config import Config
 
 db = SQLAlchemy()
@@ -14,6 +15,7 @@ mail = Mail()
 
 
 def create_app(config_class=Config):
+    """Created app and registered blueprint"""
     app = Flask(__name__)
     app.config.from_object(Config)
 

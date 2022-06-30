@@ -1,4 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Venue Info</h1>
+    <form method="POST" action="" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+                    {{ form.venue_capactity.label(class="form-control-label") }}
+                    {% if form.venue_capactity.errors %}
+                        {{ form.venue_capactity(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.venue_capactity.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.venue_capactity(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.venue_charge.label(class="form-control-label") }}
+                    {% if form.venue_charge.errors %}
+                        {{ form.venue_charge(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.venue_charge.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.venue_charge(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+    </form>
+
 {% endblock content %}

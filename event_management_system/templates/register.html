@@ -38,6 +38,15 @@
                     </SELECT>
                 </div>
 
+                <div class="form-group" id="venue_charges_div" style="display: none">
+                    <label for="event_charges">Charges per day</label>
+                    <input type="number" name="event_charges" class="form-control" id="venue_charges">
+                </div>
+
+                <div class="form-group" id="venue_capacity_div" style="display: none">
+                    <label for="event_capacity">Venue Capacity</label>
+                    <input type="number" name="event_capacity" class="form-control" id="venue_charges">
+                </div>
 
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}

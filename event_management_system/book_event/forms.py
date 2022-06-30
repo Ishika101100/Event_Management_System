@@ -5,11 +5,12 @@ from event_management_system.book_event.utils import no_of_guests_validation, va
 
 
 class EventForm(FlaskForm):
+    """Form for Event Booking"""
     title = StringField('Title', validators=[DataRequired()])
     category = StringField('Category', validators=[DataRequired()])
-    date = DateField('Date', validators=[DataRequired(),validate_date])
+    date = DateField('Date', validators=[DataRequired(), validate_date])
     location = StringField('location', validators=[DataRequired()])
     time = TimeField('Time', validators=[DataRequired()])
     duration = TimeField('Duration', validators=[DataRequired()])
-    no_of_guests = IntegerField('No of Guests',validators=[DataRequired(),no_of_guests_validation])
+    no_of_guests = IntegerField('No of Guests', validators=[DataRequired(), no_of_guests_validation])
     submit = SubmitField('Book Event')

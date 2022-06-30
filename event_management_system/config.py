@@ -2,6 +2,7 @@ import os
 
 
 class Config:
+    """credentials required"""
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
