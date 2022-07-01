@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
+
 from event_management_system.book_event.forms import EventForm
 from event_management_system.models import Venues, EventCategory
 

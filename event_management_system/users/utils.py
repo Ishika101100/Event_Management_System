@@ -11,6 +11,7 @@ from event_management_system import mail
 
 
 def save_picture(form_picture):
+    """save picture validation"""
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
@@ -25,6 +26,7 @@ def save_picture(form_picture):
 
 
 def send_reset_email(user):
+    """send reset password email validation"""
     token = user.get_reset_token()
     msg = Message('Password Reset Request',
                   sender='noreply@demo.com',
@@ -38,6 +40,7 @@ If you did not make this request then simply ignore this email and no changes wi
 
 
 def phone_number_validation(self, field):
+    """phone number validation"""
     if field.data.isnumeric():
         regex = r'[7-9][0-9]{9}'
         if not (re.fullmatch(regex, field.data)):
@@ -45,11 +48,13 @@ def phone_number_validation(self, field):
 
 
 def age_validation(self, field):
+    """age validation"""
     if not field.data > 13:
         raise ValidationError("Age must be greater than 13")
 
 
 def password_validation(self, field):
+    """password validation"""
     regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$'
     if not re.fullmatch(regex, field.data):
         raise ValidationError("Password should consist One Capital Letter,Special Character,One Number,Length 8-18")

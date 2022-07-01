@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DateField, TimeField
 from wtforms.validators import DataRequired
+
 from event_management_system.book_event.utils import no_of_guests_validation, validate_date
 
 
