@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="form-group" id="venue_location_div" style="display:none">
-                  <label for="event_category"> Venue Ideal For:</label>
+                    <label for="event_category"> Venue Ideal For:</label>
                     <SELECT name="event_category">
                         {% for j in get_venue_type %}
                             <option value={{ j.id }}>{{ j.name }}</option>
@@ -130,5 +130,5 @@
     </div>
 {% endblock content %}
 {% block jquery %}
-<script src="{{ url_for('static', filename="js/register.js") }}"></script>
+    <script src="{{ url_for('static', filename="js/register.js") }}"></script>
 {% endblock jquery %}

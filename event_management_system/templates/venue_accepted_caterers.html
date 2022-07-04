@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
-            {% for i in caterer %}
-                <div class="row">
-                    <div class="card-body table-bordered">
-                        <p class="card-text" value={{ i }}>{{ caterer[i] }}</p>
-                        <p class="card-text" value={{ i }}>{{ caterer_mobile_number[i] }}</p>
-                        <p class="card-text" value={{ i }}>{{ caterer_email[i] }}</p>
-                        <p class="card-text" value={{ i }}>{{ caterer_address[i] }}</p>
-                        <a role="button" href="{{ url_for('venue.venue_reject_caterer_request', caterer_id=i) }}"
-                                   class="btn btn-sm btn-outline-danger warning">Remove Caterer</a>
-                    </div>
-                </div>
-            {% endfor %}
+    {% for i in caterer %}
+        <div class="row">
+            <div class="card-body table-bordered">
+                <p class="card-text" value={{ i }}>{{ caterer[i] }}</p>
+                <p class="card-text" value={{ i }}>{{ caterer_mobile_number[i] }}</p>
+                <p class="card-text" value={{ i }}>{{ caterer_email[i] }}</p>
+                <p class="card-text" value={{ i }}>{{ caterer_address[i] }}</p>
+                <a role="button" href="{{ url_for('venue.venue_reject_caterer_request', caterer_id=i) }}"
+                   class="btn btn-sm btn-outline-danger warning">Remove Caterer</a>
+            </div>
+        </div>
+    {% endfor %}
 
 {% endblock content %}

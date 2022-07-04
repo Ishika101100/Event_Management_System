@@ -3,19 +3,19 @@
     <form method="POST" action="" enctype="multipart/form-data">
 
         <div class="form-group">
-            {% for i in get_decorator %}
+            {% for i in get_caterer %}
                 <div class="row">
                     <div class="card-body table-bordered">
-                        <p class="card-text" value={{ i.decorator_id }}>Decoration
-                            Type: {{ i.decorator_get_decorationType.decoration_type }} </p>
-                        <p class="card-text" value={{ i.decorator_id }}>Charge: {{ i.charges }} </p>
+                        <p class="card-text" value={{ i.caterer_id }}>Decoration
+                            Type: {{ i.caterer_get_foodcategory.food_type }} </p>
+                        <p class="card-text" value={{ i.caterer_id }}>Charge: {{ i.charges }} </p>
 
                         <div class="btn-group">
                             <a role="button"
-                               href="{{ url_for('decorator.update_category',decorator_id=i.decorator_id,decorator_type_id=i.decoration_type_id) }}"
+                               href="{{ url_for('caterer.update_category',caterer_id=i.caterer_id,food_category_id=i.food_category_id) }}"
                                class="btn btn-sm btn-outline-success success">Update</a>
                             <a role="button"
-                               href="{{ url_for('decorator.delete_category',decorator_id=i.decorator_id,decorator_type_id=i.decoration_type_id) }}"
+                               href="{{ url_for('caterer.delete_category',caterer_id=i.caterer_id,food_category_id=i.food_category_id) }}"
                                class="btn btn-sm btn-outline-danger warning">Delete</a>
                         </div>
                     </div>

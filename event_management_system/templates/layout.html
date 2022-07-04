@@ -43,36 +43,47 @@
                             <a class="nav-item nav-link" href="{{ url_for('venue.check_event') }}">Check Event</a>
                             <a class="nav-item nav-link" href="{{ url_for('venue.venue_info') }}">Venue Info</a>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="{{ url_for('venue.venue_decorator') }}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Decorator
+                                <a class="nav-link dropdown-toggle" href="{{ url_for('venue.venue_decorator') }}"
+                                   id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    Decorator
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <a class="dropdown-item" href="{{ url_for('venue.venue_decorator') }}">Requests</a>
-                                  <a class="dropdown-item" href="{{ url_for('venue.venue_accepted_decorators') }}">Accepted Decorator requests</a>
-                                  <a class="dropdown-item" href="{{ url_for('venue.venue_rejected_decorators') }}">Rejected Decorator requests</a>
-                              </li>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_decorator') }}">Requests</a>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_accepted_decorators') }}">Accepted
+                                        Decorator requests</a>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_rejected_decorators') }}">Rejected
+                                        Decorator requests</a>
+                            </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="{{ url_for('venue.venue_catrers') }}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Caterer
+                                <a class="nav-link dropdown-toggle" href="{{ url_for('venue.venue_catrers') }}"
+                                   id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    Caterer
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <a class="dropdown-item" href="{{ url_for('venue.venue_catrers') }}">Requests</a>
-                                  <a class="dropdown-item" href="{{ url_for('venue.venue_accepted_catrers') }}">Accepted Decorator requests</a>
-                                  <a class="dropdown-item" href="{{ url_for('venue.venue_rejected_catrers') }}">Rejected Decorator requests</a>
-                              </li>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_catrers') }}">Requests</a>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_accepted_catrers') }}">Accepted
+                                        Decorator requests</a>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_rejected_catrers') }}">Rejected
+                                        Decorator requests</a>
+                            </li>
                         {% endif %}
 
                         {% if current_user.user_type == 3 %}
                             <a class="nav-item nav-link" href="{{ url_for('decorator.check_event') }}">Check Event</a>
                             <a class="nav-item nav-link" href="{{ url_for('decorator.venues') }}">Venue</a>
                             <a class="nav-item nav-link" href="{{ url_for('decorator.category') }}">Add Category</a>
-                            <a class="nav-item nav-link" href="{{ url_for('decorator.view_decoration_type') }}">View Category</a>
+                            <a class="nav-item nav-link" href="{{ url_for('decorator.view_decoration_type') }}">View
+                                Category</a>
                         {% endif %}
 
                         {% if current_user.user_type == 4 %}
                             <a class="nav-item nav-link" href="{{ url_for('caterer.check_event') }}">Check Event</a>
                             <a class="nav-item nav-link" href="{{ url_for('caterer.venues') }}">Venue</a>
                             <a class="nav-item nav-link" href="{{ url_for('caterer.category') }}">Add Category</a>
+                            <a class="nav-item nav-link" href="{{ url_for('caterer.view_food_category') }}">View
+                                Category</a>
                         {% endif %}
 
                         <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Account</a>

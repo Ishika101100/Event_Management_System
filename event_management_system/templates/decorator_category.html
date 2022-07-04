@@ -1,36 +1,36 @@
 {% extends "layout.html" %}
 {% block content %}
-    <form method="POST" action="" >
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-                    {{ form.decoration_type.label(class="form-control-label") }}
-                    {% if form.decoration_type.errors %}
-                        {{ form.decoration_type(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.decoration_type.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.decoration_type(class="form-control form-control-lg") }}
-                    {% endif %}
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.decoration_type.label(class="form-control-label") }}
+            {% if form.decoration_type.errors %}
+                {{ form.decoration_type(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.decoration_type.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
                 </div>
-                <div class="form-group">
-                    {{ form.category_charges.label(class="form-control-label") }}
-                    {% if form.category_charges.errors %}
-                        {{ form.category_charges(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.category_charges.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.category_charges(class="form-control form-control-lg") }}
-                    {% endif %}
+            {% else %}
+                {{ form.decoration_type(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.category_charges.label(class="form-control-label") }}
+            {% if form.category_charges.errors %}
+                {{ form.category_charges(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.category_charges.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
                 </div>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
-            </div>
+            {% else %}
+                {{ form.category_charges(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
     </form>
 
 {% endblock content %}
