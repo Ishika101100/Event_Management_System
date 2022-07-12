@@ -1,4 +1,38 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Events</h1>
+    <form method="POST" action="" enctype="multipart/form-data">
+    <div class="form-group">
+        {% for i in event_detail %}
+            <div class="row">
+            <div class="card-body table-bordered">
+
+            <div>
+                <p class="card-text" value={{ i.id }}>Title: {{ i.title }} </p>
+                <p class="card-text" value={{ i.id }}>User Name: {{ i.Event_get_user.username }} </p>
+                <p class="card-text" value={{ i.id }}>No. of Guests: {{ i.no_of_guests }} </p>
+                <p class="card-text" value={{ i.id }}>Date: {{ i.date }} </p>
+                <p class="card-text" value={{ i.id }}>Decorator Charge: {{ i.decorator_charge }} </p>
+                <p class="card-text" value={{ i.id }}>Caterer Charge: {{ i.caterer_charge }} </p>
+                <p class="card-text" value={{ i.id }}>Venue Charge: {{ i.venue_charge }} </p>
+                <p class="card-text" value={{ i.id }}>Total Charge: {{ i.Total_charge }} </p>
+            </div>
+                {% if i.is_approved_by_venue == None %}
+            <div class="btn-group" style="margin-top: 10px">
+                            <button class="btn btn-sm btn-outline-secondary" disabled>Pending</button>
+                        </div>
+                {% elif i.is_approved_by_venue == True %}
+            <div class="btn-group" style="margin-top: 10px">
+                            <button class="btn btn-sm btn-outline-success" disabled>Accepted</button>
+                        </div>
+                {% else %}
+                <div class="btn-group" style="margin-top: 10px">
+                            <button class="btn btn-sm btn-outline-danger" disabled>Rejected</button>
+                        </div>
+                {% endif %}
+            </div>
+            </div>
+
+        {% endfor %}
+    </div>
+    </form>
 {% endblock content %}

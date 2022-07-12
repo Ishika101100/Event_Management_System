@@ -36,11 +36,23 @@
                         <div class="navbar-nav mr-auto">
                         {% if current_user.user_type == 1 %}
                             <a class="nav-item nav-link" href="{{ url_for('book_event.event') }}">Book Event</a>
-                            <a class="nav-item nav-link" href="{{ url_for('main.get_bill') }}">Get Bill</a>
+                            <a class="nav-item nav-link" href="{{ url_for('book_event.view_event') }}">View Event</a>
                         {% endif %}
 
                         {% if current_user.user_type == 2 %}
-                            <a class="nav-item nav-link" href="{{ url_for('venue.check_event') }}">Check Event</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="{{ url_for('venue.check_event') }}"
+                                   id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    Event
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url_for('venue.check_event') }}">Requests</a>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_accepted_event') }}">Accepted
+                                        Event requests</a>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_rejected_event') }}">Rejected
+                                        Event requests</a>
+                            </li>
                             <a class="nav-item nav-link" href="{{ url_for('venue.venue_info') }}">Venue Info</a>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="{{ url_for('venue.venue_decorator') }}"
@@ -71,8 +83,8 @@
                         {% endif %}
 
                         {% if current_user.user_type == 3 %}
-                            <a class="nav-item nav-link" href="{{ url_for('decorator.check_event') }}">Check Event</a>
-                            <a class="nav-item nav-link" href="{{ url_for('decorator.venues') }}">Venue</a>
+                            <a class="nav-item nav-link" href="{{ url_for('decorator.check_decorator_event') }}">Check Event</a>
+                            <a class="nav-item nav-link" href="{{ url_for('decorator.decorator_venues') }}">Venue</a>
                             <a class="nav-item nav-link" href="{{ url_for('decorator.category') }}">Add Category</a>
                             <a class="nav-item nav-link" href="{{ url_for('decorator.view_decoration_type') }}">View
                                 Category</a>

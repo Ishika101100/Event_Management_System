@@ -50,14 +50,19 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     title = db.Column(db.String(20), nullable=False)
-    category = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.DateTime, nullable=False)
+    category = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.Date, nullable=False)
     venue_id = db.Column(db.Integer, db.ForeignKey('venues.id'))
     decorator_id = db.Column(db.Integer, db.ForeignKey('decorator.id'))
     caterer_id = db.Column(db.Integer, db.ForeignKey('caterer.id'))
-    time = db.Column(db.DateTime, nullable=False)
-    duration = db.Column(db.DateTime, nullable=False)
+    start_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False)
     no_of_guests = db.Column(db.Integer, nullable=False)
+    is_approved_by_venue=db.Column(db.Boolean)
+    decorator_charge=db.Column(db.Integer,default=0)
+    caterer_charge=db.Column(db.Integer,nullable=False,default=0)
+    venue_charge=db.Column(db.Integer,nullable=False,default=0)
+    Total_charge=db.Column(db.Integer,nullable=True,default=0)
 
 
 class Venues(db.Model):
@@ -68,7 +73,7 @@ class Venues(db.Model):
     decorator = relationship('VenueGetDecorator', backref='decorator_get_venue', lazy=True)
     caterer = relationship("VenueGetCaterer", backref='caterer_get_venue', lazy=True)
     event = relationship("Event", backref='venue_get_event', cascade="all, delete-orphan", lazy="joined")
-    venue_type = db.Column(db.String)
+    venue_type = db.Column(db.Integer)
     capacity = db.Column(db.Integer)
     charges = db.Column(db.Integer)
     user = db.relationship('User', backref=backref("User_for_venue", uselist=False))
@@ -81,8 +86,10 @@ class Decorator(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     decoration_type = db.relationship("DecoratorGetTypes", backref='decorator_get_types', lazy=True)
     venues = db.relationship("VenueGetDecorator", backref=backref("venue_get_decorators", uselist=False))
-    event = db.relationship("Event", backref="decorator_get_event", cascade="all, delete-orphan", lazy="joined")
+    # event = db.relationship("Event", backref="decorator_get_event", cascade="all, delete-orphan", lazy="joined")
+    event = db.relationship('Event', backref=backref("decorator_get_events", uselist=False))
     user = db.relationship('User', backref=backref("User", uselist=False))
+
 
 
 class DecoratorType(db.Model):

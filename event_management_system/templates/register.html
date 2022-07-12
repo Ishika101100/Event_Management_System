@@ -23,6 +23,7 @@
                 <div class="form-group">
                     <label for="user_type"> Register As:</label>
                     <SELECT name="user_type" id="user_type">
+                    <option>-------</option>
                         {% for i in get_user_type %}
                             <option value={{ i.id }}>{{ i.user_type }}</option>
                         {% endfor %}

@@ -9,6 +9,7 @@
             <div>
                 <p class="card-text" value={{ i.id }}>Title: {{ i.title }} </p>
                 <p class="card-text" value={{ i.id }}>User Name: {{ i.Event_get_user.username }} </p>
+
                 <p class="card-text" value={{ i.id }}>No. of Guests: {{ i.no_of_guests }} </p>
                 <p class="card-text" value={{ i.id }}>Date: {{ i.date }} </p>
                 <p class="card-text" value={{ i.id }}>Decorator Charge: {{ i.decorator_charge }} </p>
@@ -16,14 +17,14 @@
                 <p class="card-text" value={{ i.id }}>Venue Charge: {{ i.venue_charge }} </p>
                 <p class="card-text" value={{ i.id }}>Total Charge: {{ i.Total_charge }} </p>
             </div>
-            <div class="btn-group" style="margin-top: 10px">
-                            <a role="button"
-                               href="{{ url_for('venue.venue_accept_booking_request', event_id=i.id) }}"
-                               class="btn btn-sm btn-outline-success success">Accept</a>
-                            <a role="button"
-                               href="{{ url_for('venue.venue_reject_booking_request', event_id=i.id) }}"
-                               class="btn btn-sm btn-outline-danger warning">Reject</a>
-                        </div>
+{#            <div class="btn-group" style="margin-top: 10px">#}
+{#                            <a role="button"#}
+{#                               href="{{ url_for('venue.venue_accept_booking_request', event_id=i.id) }}"#}
+{#                               class="btn btn-sm btn-outline-success success">Accept</a>#}
+{#                            <a role="button"#}
+{#                               href="{{ url_for('venue.venue_reject_booking_request', event_id=i.id) }}"#}
+{#                               class="btn btn-sm btn-outline-danger warning">Reject</a>#}
+{#                        </div>#}
 
 
 

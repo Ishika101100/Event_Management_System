@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 from event_management_system import db
 from event_management_system.caterer.forms import CatererAddCategoryForm
-from event_management_system.models import Venues, Caterer, VenueGetCaterer, FoodCategory, CatererGetFoodCategory
+from event_management_system.models import Venues, Caterer, VenueGetCaterer, FoodCategory, CatererGetFoodCategory, Event
 
 caterer = Blueprint('caterer', __name__)
 
@@ -13,7 +13,9 @@ caterer = Blueprint('caterer', __name__)
 def check_event():
     """Caterer can check events where he has served food"""
     if current_user.user_type == 4:
-        return render_template('caterer_check_events.html')
+        caterer = Caterer.query.filter_by(user_id=current_user.id).first()
+        event_detail = Event.query.filter_by(caterer_id=caterer.id).all()
+        return render_template('caterer_check_events.html',event_detail=event_detail)
     else:
         flash("Only caterer can access this page")
         return redirect(url_for('main.home'))

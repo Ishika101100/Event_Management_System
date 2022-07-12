@@ -21,25 +21,63 @@
                 </div>
 
                 <div class="form-group">
-                    {{ form.category.label(class="form-control-label") }}
-                    {% if form.category.errors %}
-                        {{ form.category(class="form-control form-control-lg is-invalid") }}
+                    {{ form.no_of_guests.label(class="form-control-label") }}
+                    {% if form.no_of_guests.errors %}
+                        {{ form.no_of_guests(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.category.errors %}
+                            {% for error in form.no_of_guests.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        <SELECT name="event_location" id="event">
-                            {{ cate }}
-                            {% for i in cate %}
-                                <option value={{ i.name }}>{{ i.name }}</option>
-                            {% endfor %}
-
-                        </SELECT>
+                        {{ form.no_of_guests(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
 
+                <div class="form-group">
+                    <label for="event_type"> Event Type: </label>
+                    <SELECT name="event_location" id="event">
+                        <option>------------</option>
+                        {% for i in cate %}
+                            <option value={{ i.id }}>{{ i.name }}</option>
+                        {% endfor %}
+                    </SELECT>
+                </div>
+
+                <div class="form-group">
+                    <label for="venue_select"> Venues: </label>
+                    <SELECT name="venue_select" id="venue">
+                        <option>------------</option>
+{#                        {% for i in venue_get %}#}
+{#                            <option value={{ i.id }}>{{ i.venue_name.username }}</option>#}
+{#                        {% endfor %}#}
+                    </SELECT>
+                </div>
+                <div class="venue_details">
+                </div>
+
+                <div class="form-group">
+                    <label for="caterer_select"> Caterer: </label>
+                    <SELECT name="caterer_select" id="caterer">
+                        <option>------------</option>
+{#                        {% for i in caterer %}#}
+{#                            <option value={{ i.id }}>{{ i.venue_get_caterer.user_get_caterer.username }}</option>#}
+{#                        {% endfor %}#}
+                    </SELECT>
+                </div>
+                <div class="caterer_details">
+                </div>
+                <div class="form-group decorator_div">
+                    <label for="decorator_select"> Decorator: </label>
+                    <SELECT name="decorator_select" id="decorator">
+                        <option>------------</option>
+{#                        {% for i in decorator %}#}
+{#                            <option value={{ i.id }}>{{ i.venue_get_decorators.user_get_decorator.username }}</option>#}
+{#                        {% endfor %}#}
+                    </SELECT>
+                </div>
+                <div class="decorator_details">
+                </div>
                 <div class="form-group">
                     {{ form.date.label(class="form-control-label") }}
                     {% if form.date.errors %}
@@ -54,72 +92,47 @@
                     {% endif %}
                 </div>
 
+
                 <div class="form-group">
-                    {{ form.location.label(class="form-control-label") }}
-                    {% if form.location.errors %}
-                        {{ form.location(class="form-control form-control-lg is-invalid") }}
+                    {{ form.start_time.label(class="form-control-label") }}
+                    {% if form.start_time.errors %}
+                        {{ form.start_time(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.location.errors %}
+                            {% for error in form.start_time.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        <SELECT name="event_location" id="event">
-                            {{ venue_get }}
-                            {% for i in venue_get %}
-                                <option value={{ i.name }}>{{ i.name }}</option>
-                            {% endfor %}
-
-                        </SELECT>
+                        {{ form.start_time(class="form-control form-control-lg") }}
                     {% endif %}
+{#                    <select>#}
+{#                        <option value="01:00">01</option>#}
+{#                        <option value="02:00">02</option>#}
+{#                        <option value="03:00">03</option>#}
+{#                        <option value="04:00">04</option>#}
+{#                    </select>#}
+{#                    <input type="number" required step="3600">#}
                 </div>
 
 
                 <div class="form-group">
-                    {{ form.time.label(class="form-control-label") }}
-                    {% if form.time.errors %}
-                        {{ form.time(class="form-control form-control-lg is-invalid") }}
+                    {{ form.end_time.label(class="form-control-label") }}
+                    {% if form.end_time.errors %}
+                        {{ form.end_time(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in form.time.errors %}
+                            {% for error in form.end_time.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.time(class="form-control form-control-lg") }}
+                        {{ form.end_time(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
+                <div class="end_time_alert"></div>
 
-
-                <div class="form-group">
-                    {{ form.duration.label(class="form-control-label") }}
-                    {% if form.duration.errors %}
-                        {{ form.duration(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.duration.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.duration(class="form-control form-control-lg") }}
-                    {% endif %}
+                <div class="bill_user">
                 </div>
-
-                <div class="form-group">
-                    {{ form.no_of_guests.label(class="form-control-label") }}
-                    {% if form.no_of_guests.errors %}
-                        {{ form.no_of_guests(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.no_of_guests.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.no_of_guests(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-
-                <div class="form-group">
+                <div class="form-group submit_button">
                     {{ form.submit(class="btn btn-outline-info") }}
                 </div>
 
@@ -128,3 +141,8 @@
         </form>
     </div>
 {% endblock content %}
+{% block jquery %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.4/moment.js"></script>
+    <script src="{{ url_for('static', filename="js/book_event.js") }}"></script>
+{% endblock jquery %}
+

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     {% for i in get_venues %}
-        {% if i.venue_type == '1' %}
+        {% if i.venue_type == 1 %}
             <div class="row">
                 <div class="card-body table-bordered">
                     <p class="card-text" value={{ i.id }}>Name: {{ i.venue_name.username }} </p>

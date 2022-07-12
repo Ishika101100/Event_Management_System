@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from flask_login import login_required, current_user
 
 from event_management_system import db
-from event_management_system.models import VenueGetDecorator, Decorator, Venues, VenueGetCaterer, Caterer
+from event_management_system.models import VenueGetDecorator, Decorator, Venues, VenueGetCaterer, Caterer, Event
 from event_management_system.venue.forms import VenueInfo
 
 venue = Blueprint('venue', __name__)
@@ -13,10 +13,60 @@ venue = Blueprint('venue', __name__)
 def check_event():
     """check booked events"""
     if current_user.user_type == 2:
-        return render_template('venue_check_event.html')
+        venue = Venues.query.filter_by(user_id=current_user.id).first()
+        event_detail = Event.query.filter_by(venue_id=venue.id).filter_by(is_approved_by_venue=None).all()
+        return render_template('venue_check_event.html',event_detail=event_detail)
     else:
         flash("Only venue can access this page")
         return redirect(url_for('main.home'))
+
+@venue.route("/venue_accepted_event")
+@login_required
+def venue_accepted_event():
+    """Check accepted event"""
+    if current_user.user_type == 2:
+        venue = Venues.query.filter_by(user_id=current_user.id).first()
+        event_detail = Event.query.filter_by(venue_id=venue.id).filter_by(is_approved_by_venue=True).all()
+        return render_template('venue_check_accepted_events.html',event_detail=event_detail)
+    else:
+        flash("Only venue can access this page")
+        return redirect(url_for('main.home'))
+
+
+@venue.route("/venue_rejected_event")
+@login_required
+def venue_rejected_event():
+    """Check rejected events"""
+    if current_user.user_type == 2:
+        venue = Venues.query.filter_by(user_id=current_user.id).first()
+        # current_time = datetime.datetime.now()
+        event_detail = Event.query.filter_by(venue_id=venue.id).filter_by(is_approved_by_venue=False).all()
+        return render_template('venue_check_rejected_events.html',event_detail=event_detail)
+    else:
+        flash("Only venue can access this page")
+        return redirect(url_for('main.home'))
+
+
+
+
+@venue.route("/venue_accept_booking_request/<int:event_id>")
+def venue_accept_booking_request():
+    """Venue accepts booking request"""
+    venue_obj = Venues.query.filter_by(user_id=current_user.id).first()
+    event_obj = Event.query.filter_by(venue_id=venue_obj.id).first()
+    event_obj.is_approved_by_venue = True
+    db.session.commit()
+    return redirect(url_for('main.home'))
+
+@venue.route("/venue_reject_booking_request/<int:event_id>")
+def venue_reject_booking_request():
+    """Venue rejects booking request"""
+    venue_obj = Venues.query.filter_by(user_id=current_user.id).first()
+    event_obj = Event.query.filter_by(venue_id=venue_obj.id).first()
+    event_obj.is_approved_by_venue = False
+    db.session.commit()
+    return redirect(url_for('main.home'))
+
 
 
 @venue.route("/venue_info", methods=['GET', 'POST'])
