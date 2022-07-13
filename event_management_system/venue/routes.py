@@ -94,27 +94,30 @@ def venue_info():
 
 @venue.route("/venue_decorators")
 @login_required
-def venue_decorator():
+def venue_decorators():
     """venue gets list of decorator requests for business deal"""
     if current_user.user_type == 2:
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         if current_user.id == venue.user_id:
-            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,
-                                                                   VenueGetDecorator.decorator_id == Decorator.id).add_columns(
-                Decorator.user_id).filter(VenueGetDecorator.decorator_id == Decorator.id).filter(
-                VenueGetDecorator.venue_id == Venues.id).filter(Venues.user_id == current_user.id).filter(
-                VenueGetDecorator.is_approved_decorator == None).all()
+
+            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,VenueGetDecorator.decorator_id==Decorator.id).join(Venues,VenueGetDecorator.venue_id==Venues.id).add_columns(Decorator.user_id).filter(VenueGetDecorator.decorator_id==Decorator.id).filter(Venues.user_id==current_user.id).filter(VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == None).all()
+            print(venue_get_decorator_obj)
             decorator_username = {}
             decorator_email = {}
             decorator_mobile_number = {}
             decorator_address = {}
-
+            # print(venue_get_decorator_obj)
             for i in venue_get_decorator_obj:
                 decorator = Decorator.query.filter_by(user_id=i.user_id).first()
                 decorator_username[decorator.id] = decorator.user.username
                 decorator_email[decorator.id] = decorator.user.email
                 decorator_mobile_number[decorator.id] = decorator.user.mobile_number
                 decorator_address[decorator.id] = decorator.user.address
+            # print(decorator)
+            # print(decorator_username)
+            # print(decorator_email)
+            # print(decorator_mobile_number)
+            # print(decorator_address)
             return render_template('venue_decorators.html', decorator=decorator_username,
                                    decorator_mobile_number=decorator_mobile_number, decorator_email=decorator_email,
                                    decorator_address=decorator_address)
@@ -132,11 +135,7 @@ def venue_accepted_decorators():
     if current_user.user_type == 2:
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         if current_user.id == venue.user_id:
-            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,
-                                                                   VenueGetDecorator.decorator_id == Decorator.id).add_columns(
-                Decorator.user_id).filter(VenueGetDecorator.decorator_id == Decorator.id).filter(
-                VenueGetDecorator.venue_id == Venues.id).filter(Venues.user_id == current_user.id).filter(
-                VenueGetDecorator.is_approved_decorator == True).all()
+            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,VenueGetDecorator.decorator_id==Decorator.id).join(Venues,VenueGetDecorator.venue_id==Venues.id).add_columns(Decorator.user_id).filter(VenueGetDecorator.decorator_id==Decorator.id).filter(Venues.user_id==current_user.id).filter(VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == True).all()
 
             decorator_username = {}
             decorator_email = {}
@@ -166,11 +165,7 @@ def venue_rejected_decorators():
     if current_user.user_type == 2:
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         if current_user.id == venue.user_id:
-            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,
-                                                                   VenueGetDecorator.decorator_id == Decorator.id).add_columns(
-                Decorator.user_id).filter(VenueGetDecorator.decorator_id == Decorator.id).filter(
-                VenueGetDecorator.venue_id == Venues.id).filter(Venues.user_id == current_user.id).filter(
-                VenueGetDecorator.is_approved_decorator == False).all()
+            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,VenueGetDecorator.decorator_id==Decorator.id).join(Venues,VenueGetDecorator.venue_id==Venues.id).add_columns(Decorator.user_id).filter(VenueGetDecorator.decorator_id==Decorator.id).filter(Venues.user_id==current_user.id).filter(VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == False).all()
 
             decorator_username = {}
             decorator_email = {}
@@ -227,6 +222,7 @@ def venue_catrers():
                 Caterer.user_id).filter(VenueGetCaterer.caterer_id == Caterer.id).filter(
                 VenueGetCaterer.venue_id == Venues.id).filter(Venues.user_id == current_user.id).filter(
                 VenueGetCaterer.is_approved_caterer == None).all()
+
             caterer_username = {}
             caterer_email = {}
             caterer_mobile_number = {}

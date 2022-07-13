@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+
     {% for i in decorator %}
         <div class="row">
             <div class="card-body table-bordered">
@@ -14,7 +15,7 @@
                         <a role="button" href="{{ url_for('venue.venue_reject_request', decorator_id=i) }}"
                            class="btn btn-sm btn-outline-danger warning">Reject</a>
                     </div>
-                    <small class="text-muted">9 mins</small>
+
                 </div>
             </div>
         </div>

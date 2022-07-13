@@ -55,13 +55,13 @@
                             </li>
                             <a class="nav-item nav-link" href="{{ url_for('venue.venue_info') }}">Venue Info</a>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="{{ url_for('venue.venue_decorator') }}"
+                                <a class="nav-link dropdown-toggle" href="{{ url_for('venue.venue_decorators') }}"
                                    id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
                                     Decorator
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ url_for('venue.venue_decorator') }}">Requests</a>
+                                    <a class="dropdown-item" href="{{ url_for('venue.venue_decorators') }}">Requests</a>
                                     <a class="dropdown-item" href="{{ url_for('venue.venue_accepted_decorators') }}">Accepted
                                         Decorator requests</a>
                                     <a class="dropdown-item" href="{{ url_for('venue.venue_rejected_decorators') }}">Rejected
