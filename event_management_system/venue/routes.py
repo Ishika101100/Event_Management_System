@@ -113,11 +113,6 @@ def venue_decorators():
                 decorator_email[decorator.id] = decorator.user.email
                 decorator_mobile_number[decorator.id] = decorator.user.mobile_number
                 decorator_address[decorator.id] = decorator.user.address
-            # print(decorator)
-            # print(decorator_username)
-            # print(decorator_email)
-            # print(decorator_mobile_number)
-            # print(decorator_address)
             return render_template('venue_decorators.html', decorator=decorator_username,
                                    decorator_mobile_number=decorator_mobile_number, decorator_email=decorator_email,
                                    decorator_address=decorator_address)
