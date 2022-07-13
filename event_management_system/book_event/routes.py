@@ -142,7 +142,6 @@ def event():
     """
     if current user type is 1(User),then and only then book event page will be accessed.
     """
-
     cate = EventCategory.query.all()
     venue_get = Venues.query.join(EventCategory, Venues.venue_type == EventCategory.id).filter(
         Venues.venue_type == EventCategory.id).all()

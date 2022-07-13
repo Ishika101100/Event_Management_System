@@ -9,7 +9,7 @@ def is_decorator(f):
     def wrapped(*args, **kwargs):
         if current_user.user_type == 2:
             return f()
-        flash("Only users can access this page", "warning")
+        flash("Only decorator can access this page", "warning")
         return redirect(url_for('main.home'))
 
     return wrapped
