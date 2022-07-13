@@ -21,7 +21,7 @@ def register():
     get_venue_type = EventCategory.query.all()
 
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')#utils
         user = User(username=form.username.data, user_type=form.user_type.data, email=form.email.data,
                     password=hashed_password,
                     mobile_number=form.mobile_number.data, address=form.address.data)

@@ -1,9 +1,11 @@
 import os
 import re
 import secrets
+from functools import wraps
 
 from PIL import Image
-from flask import url_for, current_app
+from flask import url_for, current_app, flash, redirect
+from flask_login import current_user
 from flask_mail import Message
 from wtforms import ValidationError
 
@@ -58,3 +60,15 @@ def password_validation(self, field):
     regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!#%*?&]{8,18}$'
     if not re.fullmatch(regex, field.data):
         raise ValidationError("Password should consist One Capital Letter,Special Character,One Number,Length 8-18")
+
+
+def is_user(f):
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        if current_user.user_type == 1:
+            return f()
+        flash("Only users can access this page", "warning")
+        return redirect(url_for('main.home'))
+
+    return wrapped
+

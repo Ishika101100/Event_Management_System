@@ -36,7 +36,7 @@ class User(db.Model, UserMixin):
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']
-        except:
+        except Exception:
             return None
 
         return User.query.get(user_id)
@@ -58,11 +58,11 @@ class Event(db.Model):
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)
     no_of_guests = db.Column(db.Integer, nullable=False)
-    is_approved_by_venue=db.Column(db.Boolean)
-    decorator_charge=db.Column(db.Integer,default=0)
-    caterer_charge=db.Column(db.Integer,nullable=False,default=0)
-    venue_charge=db.Column(db.Integer,nullable=False,default=0)
-    Total_charge=db.Column(db.Integer,nullable=True,default=0)
+    is_approved_by_venue = db.Column(db.Boolean)
+    decorator_charge = db.Column(db.Integer, default=0)
+    caterer_charge = db.Column(db.Integer, nullable=False, default=0)
+    venue_charge = db.Column(db.Integer, nullable=False, default=0)
+    Total_charge = db.Column(db.Integer, nullable=True, default=0)
 
 
 class Venues(db.Model):
@@ -89,7 +89,6 @@ class Decorator(db.Model):
     # event = db.relationship("Event", backref="decorator_get_event", cascade="all, delete-orphan", lazy="joined")
     event = db.relationship('Event', backref=backref("decorator_get_events", uselist=False))
     user = db.relationship('User', backref=backref("User", uselist=False))
-
 
 
 class DecoratorType(db.Model):

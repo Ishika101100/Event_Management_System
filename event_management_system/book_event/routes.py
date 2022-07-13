@@ -7,53 +7,49 @@ from event_management_system import db
 from event_management_system.book_event.forms import EventForm, UpdateForm
 from event_management_system.models import Venues, EventCategory, Caterer, Decorator, Event, VenueGetCaterer, \
     VenueGetDecorator, CatererGetFoodCategory, DecoratorGetTypes
+from event_management_system.users.utils import is_user
 
 book_event = Blueprint('book_event', __name__)
 
 
 @book_event.route("/update_event/<int:event_id>", methods=['GET', 'POST'])
 @login_required
+@is_user
 def update_event(event_id):
     """User can update his/her booked events"""
-    if current_user.user_type == 1:
-        form = UpdateForm()
-        event_obj = Event.query.filter_by(id=event_id).first()
 
-        if form.validate_on_submit():
-            if current_user.id == event_obj.user_id:
-                event_obj.title = form.title.data
-                event_obj.no_of_guests = form.no_of_guests.data
-                event_obj.date = form.date.data
-                event_obj.start_time = form.start_time.data
-                event_obj.end_time = form.end_time.data
-                db.session.commit()
-            return render_template('update_event.html', form=form)
-        elif request.method == 'GET':
-            form.title.data = event_obj.title
-            form.no_of_guests.data = event_obj.no_of_guests
-            form.date.data = event_obj.date
-            form.start_time.data = event_obj.start_time
-            form.end_time.data = event_obj.end_time
+    form = UpdateForm()
+    event_obj = Event.query.filter_by(id=event_id).first()
+
+    if form.validate_on_submit():
+        if current_user.id == event_obj.user_id:
+            event_obj.title = form.title.data
+            event_obj.no_of_guests = form.no_of_guests.data
+            event_obj.date = form.date.data
+            event_obj.start_time = form.start_time.data
+            event_obj.end_time = form.end_time.data
+            db.session.commit()
         return render_template('update_event.html', form=form)
-    else:
-        flash("Only users can access this page", "warning")
-        return redirect(url_for('main.home'))
+    elif request.method == 'GET':
+        form.title.data = event_obj.title
+        form.no_of_guests.data = event_obj.no_of_guests
+        form.date.data = event_obj.date
+        form.start_time.data = event_obj.start_time
+        form.end_time.data = event_obj.end_time
     return render_template('update_event.html', form=form)
+
 
 
 @book_event.route("/delete_event/<int:event_id>", methods=['GET', 'POST'])
 @login_required
+@is_user
 def delete_event(event_id):
     """User can delete his/her events"""
-    if current_user.user_type == 1:
-        form = UpdateForm()
-        event_obj = Event.query.filter_by(id=event_id).first()
-        db.session.delete(event_obj)
-        db.session.commit()
-        return render_template('view_events.html', form=form)
-    else:
-        flash("Only users can access this page", "warning")
-        return redirect(url_for('main.home'))
+
+    form = UpdateForm()
+    event_obj = Event.query.filter_by(id=event_id).first()
+    db.session.delete(event_obj)
+    db.session.commit()
     return render_template('view_events.html', form=form)
 
 
@@ -141,73 +137,73 @@ def findDecoratorDetails():
 
 @book_event.route("/book_event", methods=['GET', 'POST'])
 @login_required
+@is_user
 def event():
     """
     if current user type is 1(User),then and only then book event page will be accessed.
     """
-    if current_user.user_type == 1:
-        cate = EventCategory.query.all()
-        venue_get = Venues.query.join(EventCategory, Venues.venue_type == EventCategory.id).filter(
-            Venues.venue_type == EventCategory.id).all()
-        caterer = VenueGetCaterer.query.join(Caterer, VenueGetCaterer.caterer_id == Caterer.id).filter(
-            VenueGetCaterer.caterer_id == Caterer.id).all()
-        decorator = VenueGetDecorator.query.join(Decorator, VenueGetDecorator.decorator_id == Decorator.id).filter(
-            VenueGetDecorator.decorator_id == Decorator.id).all()
-        form = EventForm()
-        category = request.form.get('event_location')
 
-        if category == "1":
-            event = Event.query.filter_by(user_id=current_user.id).filter_by(
-                venue_id=request.form.get('venue_select')).filter(Event.date >= date.today()).first()
-            if not event:
-                if form.validate_on_submit():
-                    event = Event(user_id=current_user.id, title=form.title.data,
-                                  category=request.form.get('event_location'), date=request.form.get('date'),
-                                  venue_id=request.form.get('venue_select'),
-                                  decorator_id=request.form.get('decorator_select'),
-                                  caterer_id=request.form.get('caterer_select'),
-                                  start_time=request.form.get('start_time'),
-                                  end_time=request.form.get('end_time'), no_of_guests=form.no_of_guests.data,
-                                  venue_charge=request.values.get("id_venue_charge"),
-                                  decorator_charge=request.values.get("id_decoration_charge"),
-                                  caterer_charge=request.values.get("id_caterer_charge"),
-                                  Total_charge=request.values.get("id_total_charge"))
-                    db.session.add(event)
-                    db.session.commit()
-                    flash(f"Your request is sent to Venue!", "alert alert-primary")
-                    return redirect(url_for('main.home'))
-            else:
-                flash("You have already registered event on this day at this venue. Please try any other date or venue",
-                      "danger")
+    cate = EventCategory.query.all()
+    venue_get = Venues.query.join(EventCategory, Venues.venue_type == EventCategory.id).filter(
+        Venues.venue_type == EventCategory.id).all()
+    caterer = VenueGetCaterer.query.join(Caterer, VenueGetCaterer.caterer_id == Caterer.id).filter(
+        VenueGetCaterer.caterer_id == Caterer.id).all()
+    decorator = VenueGetDecorator.query.join(Decorator, VenueGetDecorator.decorator_id == Decorator.id).filter(
+        VenueGetDecorator.decorator_id == Decorator.id).all()
+    form = EventForm()
+    category = request.form.get('event_location')
+
+    if category == "1":
+        event = Event.query.filter_by(user_id=current_user.id).filter_by(
+            venue_id=request.form.get('venue_select')).filter(Event.date >= date.today()).first()
+        if not event:
+            if form.validate_on_submit():
+                event = Event(user_id=current_user.id, title=form.title.data,
+                              category=request.form.get('event_location'), date=request.form.get('date'),
+                              venue_id=request.form.get('venue_select'),
+                              decorator_id=request.form.get('decorator_select'),
+                              caterer_id=request.form.get('caterer_select'),
+                              start_time=request.form.get('start_time'),
+                              end_time=request.form.get('end_time'), no_of_guests=form.no_of_guests.data,
+                              venue_charge=request.values.get("id_venue_charge"),
+                              decorator_charge=request.values.get("id_decoration_charge"),
+                              caterer_charge=request.values.get("id_caterer_charge"),
+                              Total_charge=request.values.get("id_total_charge"))
+                db.session.add(event)
+                db.session.commit()
+                flash(f"Your request is sent to Venue!", "alert alert-primary")
+                return redirect(url_for('main.home'))
         else:
-            event = Event.query.filter_by(user_id=current_user.id).filter_by(
-                venue_id=request.form.get('venue_select')).filter(Event.date >= date.today()).first()
-            if not event:
-                if form.validate_on_submit():
-                    event = Event(user_id=current_user.id, title=form.title.data,
-                                  category=request.form.get('event_location'), date=request.form.get('date'),
-                                  venue_id=request.form.get('venue_select'),
-                                  caterer_id=request.form.get('caterer_select'),
-                                  start_time=request.form.get('start_time'), end_time=request.form.get('end_time'),
-                                  no_of_guests=form.no_of_guests.data,
-                                  venue_charge=request.values.get("id_venue_charge"),
-                                  caterer_charge=request.values.get("id_caterer_charge"),
-                                  Total_charge=request.values.get("id_total_charge"))
-                    db.session.add(event)
-                    db.session.commit()
-                    flash(f"Your request is sent to Venue!", "alert alert-primary")
-                    return redirect(url_for('main.home'))
-            else:
-                flash("You have already registered event on this day at this venue. Please try any other date or venue")
-        return render_template('book_event.html', cate=cate, caterer=caterer, venue_get=venue_get, decorator=decorator,
-                               form=form)
+            flash("You have already registered event on this day at this venue. Please try any other date or venue",
+                  "danger")
     else:
-        flash("Only users can access this page", "warning")
-        return redirect(url_for('main.home'))
+        event = Event.query.filter_by(user_id=current_user.id).filter_by(
+            venue_id=request.form.get('venue_select')).filter(Event.date >= date.today()).first()
+        if not event:
+            if form.validate_on_submit():
+                event = Event(user_id=current_user.id, title=form.title.data,
+                              category=request.form.get('event_location'), date=request.form.get('date'),
+                              venue_id=request.form.get('venue_select'),
+                              caterer_id=request.form.get('caterer_select'),
+                              start_time=request.form.get('start_time'), end_time=request.form.get('end_time'),
+                              no_of_guests=form.no_of_guests.data,
+                              venue_charge=request.values.get("id_venue_charge"),
+                              caterer_charge=request.values.get("id_caterer_charge"),
+                              Total_charge=request.values.get("id_total_charge"))
+                db.session.add(event)
+                db.session.commit()
+                flash(f"Your request is sent to Venue!", "alert alert-primary")
+                return redirect(url_for('main.home'))
+        else:
+            flash("You have already registered event on this day at this venue. Please try any other date or venue")
+    return render_template('book_event.html', cate=cate, caterer=caterer, venue_get=venue_get, decorator=decorator,
+                           form=form)
+
 
 
 @book_event.route("/view_event", methods=['GET', 'POST'])
 @login_required
+@is_user
 def view_event():
     """View event details"""
     event_detail = Event.query.filter_by(user_id=current_user.id).all()

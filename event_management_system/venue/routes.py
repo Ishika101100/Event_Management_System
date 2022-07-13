@@ -15,10 +15,11 @@ def check_event():
     if current_user.user_type == 2:
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         event_detail = Event.query.filter_by(venue_id=venue.id).filter_by(is_approved_by_venue=None).all()
-        return render_template('venue_check_event.html',event_detail=event_detail)
+        return render_template('venue_check_event.html', event_detail=event_detail)
     else:
         flash("Only venue can access this page")
         return redirect(url_for('main.home'))
+
 
 @venue.route("/venue_accepted_event")
 @login_required
@@ -27,7 +28,7 @@ def venue_accepted_event():
     if current_user.user_type == 2:
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         event_detail = Event.query.filter_by(venue_id=venue.id).filter_by(is_approved_by_venue=True).all()
-        return render_template('venue_check_accepted_events.html',event_detail=event_detail)
+        return render_template('venue_check_accepted_events.html', event_detail=event_detail)
     else:
         flash("Only venue can access this page")
         return redirect(url_for('main.home'))
@@ -41,32 +42,28 @@ def venue_rejected_event():
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         # current_time = datetime.datetime.now()
         event_detail = Event.query.filter_by(venue_id=venue.id).filter_by(is_approved_by_venue=False).all()
-        return render_template('venue_check_rejected_events.html',event_detail=event_detail)
+        return render_template('venue_check_rejected_events.html', event_detail=event_detail)
     else:
         flash("Only venue can access this page")
         return redirect(url_for('main.home'))
 
 
-
-
 @venue.route("/venue_accept_booking_request/<int:event_id>")
-def venue_accept_booking_request():
+def venue_accept_booking_request(event_id):
     """Venue accepts booking request"""
-    venue_obj = Venues.query.filter_by(user_id=current_user.id).first()
-    event_obj = Event.query.filter_by(venue_id=venue_obj.id).first()
+    event_obj = Event.query.filter_by(id=event_id).first()
     event_obj.is_approved_by_venue = True
     db.session.commit()
     return redirect(url_for('main.home'))
 
+
 @venue.route("/venue_reject_booking_request/<int:event_id>")
-def venue_reject_booking_request():
+def venue_reject_booking_request(event_id):
     """Venue rejects booking request"""
-    venue_obj = Venues.query.filter_by(user_id=current_user.id).first()
-    event_obj = Event.query.filter_by(venue_id=venue_obj.id).first()
+    event_obj = Event.query.filter_by(id=event_id).first()
     event_obj.is_approved_by_venue = False
     db.session.commit()
     return redirect(url_for('main.home'))
-
 
 
 @venue.route("/venue_info", methods=['GET', 'POST'])
@@ -100,7 +97,11 @@ def venue_decorators():
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         if current_user.id == venue.user_id:
 
-            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,VenueGetDecorator.decorator_id==Decorator.id).join(Venues,VenueGetDecorator.venue_id==Venues.id).add_columns(Decorator.user_id).filter(VenueGetDecorator.decorator_id==Decorator.id).filter(Venues.user_id==current_user.id).filter(VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == None).all()
+            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,
+                                                                   VenueGetDecorator.decorator_id == Decorator.id).join(
+                Venues, VenueGetDecorator.venue_id == Venues.id).add_columns(Decorator.user_id).filter(
+                VenueGetDecorator.decorator_id == Decorator.id).filter(Venues.user_id == current_user.id).filter(
+                VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == None).all()
             print(venue_get_decorator_obj)
             decorator_username = {}
             decorator_email = {}
@@ -130,7 +131,11 @@ def venue_accepted_decorators():
     if current_user.user_type == 2:
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         if current_user.id == venue.user_id:
-            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,VenueGetDecorator.decorator_id==Decorator.id).join(Venues,VenueGetDecorator.venue_id==Venues.id).add_columns(Decorator.user_id).filter(VenueGetDecorator.decorator_id==Decorator.id).filter(Venues.user_id==current_user.id).filter(VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == True).all()
+            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,
+                                                                   VenueGetDecorator.decorator_id == Decorator.id).join(
+                Venues, VenueGetDecorator.venue_id == Venues.id).add_columns(Decorator.user_id).filter(
+                VenueGetDecorator.decorator_id == Decorator.id).filter(Venues.user_id == current_user.id).filter(
+                VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == True).all()
 
             decorator_username = {}
             decorator_email = {}
@@ -160,7 +165,12 @@ def venue_rejected_decorators():
     if current_user.user_type == 2:
         venue = Venues.query.filter_by(user_id=current_user.id).first()
         if current_user.id == venue.user_id:
-            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,VenueGetDecorator.decorator_id==Decorator.id).join(Venues,VenueGetDecorator.venue_id==Venues.id).add_columns(Decorator.user_id).filter(VenueGetDecorator.decorator_id==Decorator.id).filter(Venues.user_id==current_user.id).filter(VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == False).all()
+            venue_get_decorator_obj = VenueGetDecorator.query.join(Decorator,
+                                                                   VenueGetDecorator.decorator_id == Decorator.id).join(
+                Venues, VenueGetDecorator.venue_id == Venues.id).add_columns(Decorator.user_id).filter(
+                VenueGetDecorator.decorator_id == Decorator.id).filter(Venues.user_id == current_user.id).filter(
+                VenueGetDecorator.venue_id == Venues.id).filter(VenueGetDecorator.is_approved_decorator == False).all()
+
 
             decorator_username = {}
             decorator_email = {}
@@ -173,6 +183,8 @@ def venue_rejected_decorators():
                 decorator_email[decorator.id] = decorator.user.email
                 decorator_mobile_number[decorator.id] = decorator.user.mobile_number
                 decorator_address[decorator.id] = decorator.user.address
+
+
             return render_template('venue_rejected_decorators.html', decorator=decorator_username,
                                    decorator_mobile_number=decorator_mobile_number, decorator_email=decorator_email,
                                    decorator_address=decorator_address)
