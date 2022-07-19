@@ -1,12 +1,11 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, request
-from flask_login import login_required, current_user
+from flask import Blueprint
+from flask_login import login_required
 
-from event_management_system import db
-from event_management_system.decorator.forms import AddCategoryForm
+from event_management_system.decorator.services import get_decorator_event, get_decorator_venues, \
+    get_decorator_send_request, get_update_category, get_delete_category, get_decoration_type, get_category
 from event_management_system.decorator.utils import is_decorator
-from event_management_system.models import Venues, VenueGetDecorator, Decorator, DecoratorType, DecoratorGetTypes, Event
 
-decorator = Blueprint('decorator', __name__)
+decorator = Blueprint('decorator', __name__,template_folder='templates/decorator')
 
 
 @decorator.route("/decorator_check_event")
@@ -14,10 +13,7 @@ decorator = Blueprint('decorator', __name__)
 @is_decorator
 def check_decorator_event():
     """Decorator can check events where he has decorated the venues"""
-
-    decorator = Decorator.query.filter_by(user_id=current_user.id).first()
-    event_detail = Event.query.filter_by(decorator_id=decorator.id).all()
-    return render_template('decorator_check_event.html',event_detail=event_detail)
+    return get_decorator_event()
 
 
 @decorator.route("/decorator_venues")
@@ -25,36 +21,13 @@ def check_decorator_event():
 @is_decorator
 def decorator_venues():
     """Decorator can check and add venues where he is providing service"""
-
-    get_venues = Venues.query.all()
-    current_decorator = Decorator.query.filter_by(user_id=current_user.id).first()
-    venue_get_decorator_obj_true = VenueGetDecorator.query.filter_by(decorator_id=current_decorator.id).filter_by(
-        is_approved_decorator=True).with_entities(VenueGetDecorator.venue_id,
-                                                  VenueGetDecorator.is_approved_decorator).all()
-    venue_get_decorator_obj_false = VenueGetDecorator.query.filter_by(decorator_id=current_decorator.id).filter_by(
-        is_approved_decorator=False).with_entities(VenueGetDecorator.venue_id,
-                                                   VenueGetDecorator.is_approved_decorator).all()
-    venue_get_decorator_obj_none = VenueGetDecorator.query.filter_by(decorator_id=current_decorator.id).filter_by(
-        is_approved_decorator=None).with_entities(VenueGetDecorator.venue_id,
-                                                  VenueGetDecorator.is_approved_decorator).all()
-    venue_get_decorator_obj_true_list = [i[0] for i in venue_get_decorator_obj_true]
-    venue_get_decorator_obj_false_list = [i[0] for i in venue_get_decorator_obj_false]
-    venue_get_decorator_obj_none_list = [i[0] for i in venue_get_decorator_obj_none]
-    return render_template('decorator_venues.html', get_venues=get_venues,
-                           decorator=current_decorator.id,
-                           venue_get_decorator_obj_true_list=venue_get_decorator_obj_true_list,
-                           venue_get_decorator_obj_false_list=venue_get_decorator_obj_false_list,
-                           venue_get_decorator_obj_none_list=venue_get_decorator_obj_none_list)
-
+    return get_decorator_venues()
 
 
 @decorator.route("/venue_get_request/<int:decorator_id>/<int:venue_id>")
 def decorator_send_request(venue_id, decorator_id):
     """Decorator sends request to venue for business deal"""
-    a = VenueGetDecorator(venue_id=venue_id, decorator_id=decorator_id)
-    db.session.add(a)
-    db.session.commit()
-    return redirect(url_for('main.home'))
+    return get_decorator_send_request(venue_id, decorator_id)
 
 
 @decorator.route("/decorator_category", methods=['GET', 'POST'])
@@ -62,66 +35,26 @@ def decorator_send_request(venue_id, decorator_id):
 @is_decorator
 def category():
     """Decorator can add category and it's charges"""
-
-    form = AddCategoryForm()
-    if form.validate_on_submit():
-        decorator = Decorator.query.filter_by(user_id=current_user.id).first()
-        decor_category = DecoratorType(decoration_type=form.decoration_type.data)
-        db.session.add(decor_category)
-        db.session.commit()
-        decor_charges = DecoratorGetTypes(decorator_id=decorator.id, decoration_type_id=decor_category.id,
-                                          charges=form.category_charges.data)
-        db.session.add(decor_charges)
-        db.session.commit()
-        return redirect(url_for('main.home'))
-    return render_template('decorator_category.html', form=form, title="Decoration_category")
-
+    return get_category()
 
 
 @decorator.route("/update_category/<decorator_id>/<decorator_type_id>", methods=['GET', 'POST'])
 @login_required
-@is_decorator
 def update_category(decorator_id, decorator_type_id):
     """Decorator can update category and it's charges"""
-
-    form = AddCategoryForm()
-    charge = DecoratorGetTypes.query.filter_by(decorator_id=decorator_id,
-                                               decoration_type_id=decorator_type_id).first()
-    category = DecoratorType.query.filter_by(id=decorator_type_id).first()
-    if form.validate_on_submit():
-        charge.charges = form.category_charges.data
-        category.decoration_type = form.decoration_type.data
-        db.session.commit()
-        return render_template('decorator_category.html', form=form)
-    elif request.method == 'GET':
-        form.category_charges.data = charge.charges
-        form.decoration_type.data = category.decoration_type
-    return render_template('decorator_category.html', form=form, title="Decoration_category")
-
+    return get_update_category(decorator_id, decorator_type_id)
 
 
 @decorator.route("/delete_category/<decorator_id>/<decorator_type_id>", methods=['GET', 'POST'])
 @login_required
 def delete_category(decorator_id, decorator_type_id):
     """Decorator can delete category"""
-
-    form = AddCategoryForm()
-    charge = DecoratorGetTypes.query.filter_by(decorator_id=decorator_id,
-                                               decoration_type_id=decorator_type_id).first()
-    category = DecoratorType.query.filter_by(id=decorator_type_id).first()
-    db.session.delete(charge)
-    db.session.commit()
-    db.session.delete(category)
-    db.session.commit()
-    return render_template('view_decorator_category.html', form=form)
-
+    return get_delete_category(decorator_id, decorator_type_id)
 
 
 @decorator.route("/view_decoration_category")
 @login_required
+@is_decorator
 def view_decoration_type():
     """decorator can view list of categories"""
-    decorator = Decorator.query.filter_by(user_id=current_user.id).first()
-    get_decorator = DecoratorGetTypes.query.filter_by(decorator_id=decorator.id).all()
-    return render_template('view_decorator_category.html', get_decorator=get_decorator)
-
+    return get_decoration_type()

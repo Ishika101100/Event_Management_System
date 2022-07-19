@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DateField, TimeField
 from wtforms.validators import DataRequired, Length
 
-from event_management_system.book_event.utils import validate_date
+from event_management_system.book_event.validation import validate_date
 
 
 class EventForm(FlaskForm):

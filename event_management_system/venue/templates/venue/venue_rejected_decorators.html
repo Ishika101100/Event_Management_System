@@ -1,0 +1,18 @@
+{% extends "users/layout.html" %}
+{% block content %}
+    {% for i in decorator %}
+        <div class="row">
+            <div class="card-body table-bordered">
+                <p class="card-text" value={{ i }}>{{ decorator[i] }}</p>
+                <p class="card-text" value={{ i }}>{{ decorator_mobile_number[i] }}</p>
+                <p class="card-text" value={{ i }}>{{ decorator_email[i] }}</p>
+                <p class="card-text" value={{ i }}>{{ decorator_address[i] }}</p>
+                <div class="btn-group">
+                    <a role="button" href="{{ url_for('venue.venue_accept_request', decorator_id=i) }}"
+                       class="btn btn-sm btn-outline-success success">Add Decorator</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends "users/layout.html" %}
+{% block content %}
+    {% for i in get_venues %}
+        {% if i.venue_type == 1 %}
+            <div class="row">
+                <div class="card-body table-bordered">
+                    <p class="card-text" value={{ i.id }}>Name: {{ i.venue_name.username }} </p>
+                    <p class="card-text" value={{ i.id }}>Email: {{ i.venue_name.email }} </p>
+                    <p class="card-text" value={{ i.id }}>Mobile Number: {{ i.venue_name.mobile_number }} </p>
+                    <p class="card-text" value={{ i.id }}>Address: {{ i.venue_name.address }} </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% if i.id in venue_get_decorator_obj_true_list %}
+
+                            <div class="btn-group">
+                                <button role="button" type="button" class="btn btn-sm btn-outline-success" disabled>
+                                    Request Accepted
+                                </button>
+                            </div>
+                        {% elif i.id in venue_get_decorator_obj_false_list %}
+                            <div class="btn-group">
+                                <button role="button" type="button" class="btn btn-sm btn-outline-danger" disabled>
+                                    Request Rejected
+                                </button>
+                            </div>
+                        {% elif i.id in venue_get_decorator_obj_none_list %}
+                            <div class="btn-group">
+                                <button role="button" type="button" class="btn btn-sm btn-outline-info" disabled>Request
+                                    pending
+                                </button>
+                            </div>
+                        {% else %}
+                            <div class="btn-group">
+                                <a role="button"
+                                   href="{{ url_for('decorator.decorator_send_request', venue_id=i.id, decorator_id=decorator) }}"
+                                   class="btn btn-sm btn-outline-secondary">Make Request</a>
+                            </div>
+                        {% endif %}
+                        <small class="text-muted">Charges:{{ i.charges }} per day</small>
+                    </div>
+                </div>
+
+            </div>
+        {% endif %}
+    {% endfor %}
+
+
+{% endblock content %}

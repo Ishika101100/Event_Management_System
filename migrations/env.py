@@ -3,13 +3,18 @@ from __future__ import with_statement
 import logging
 from logging.config import fileConfig
 
-from event_management_system.models import *
 from flask import current_app
 
 from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
+from event_management_system.book_event.models import Event, EventCategory
+from event_management_system.caterer.models import Caterer, FoodCategory, CatererGetFoodCategory
+from event_management_system.decorator.models import Decorator, DecoratorType, DecoratorGetTypes
+from event_management_system.users.models import User, UserType
+from event_management_system.venue.models import Venues, VenueGetDecorator, VenueGetCaterer
+
 config = context.config
 
 # Interpret the config file for Python logging.
@@ -18,8 +23,8 @@ fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
 # add your model's MetaData object here
-
 # for 'autogenerate' support
+
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 config.set_main_option(
@@ -80,8 +85,7 @@ def run_migrations_online():
             connection=connection,
             target_metadata=target_metadata,
             process_revision_directives=process_revision_directives,
-            **current_app.extensions['migrate'].configure_args,
-            compare_type=True
+            **current_app.extensions['migrate'].configure_args,compare_type=True
         )
 
         with context.begin_transaction():
