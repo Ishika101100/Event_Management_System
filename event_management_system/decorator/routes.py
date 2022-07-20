@@ -5,7 +5,7 @@ from event_management_system.decorator.services import get_decorator_event, get_
     get_decorator_send_request, get_update_category, get_delete_category, get_decoration_type, get_category
 from event_management_system.decorator.utils import is_decorator
 
-decorator = Blueprint('decorator', __name__,template_folder='templates/decorator')
+decorator = Blueprint('decorator', __name__, template_folder='templates/decorator')
 
 
 @decorator.route("/decorator_check_event")

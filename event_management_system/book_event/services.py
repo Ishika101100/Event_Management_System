@@ -4,6 +4,8 @@ from flask_login import current_user
 from event_management_system.book_event.forms import UpdateForm, EventForm
 from event_management_system.book_event.models import get_event_query, get_event_category, get_event, \
     book_event_for_category_one, book_event_for_category_two, get_current_event
+from event_management_system.caterer.models import get_caterer_food_cate_for_event
+from event_management_system.decorator.models import get_decor_types_for_event
 from event_management_system.users.models import commit_function, delete_function, add_function
 from event_management_system.venue.models import get_venue_for_event, get_venue_data_for_event, \
     venue_get_caterer_for_event, caterer_query_for_event, venue_get_decorator_for_event, decorator_query_for_event, \
@@ -51,6 +53,33 @@ def getEventVenue():
             data = {'id': venue.id, 'name': venue.venue_name.username}
             venue_name.append(data)
     return jsonify({'venue_name': venue_name})
+
+def getCatererDetails():
+    if request.method == "POST":
+        form_data = request.get_json()
+        caterer_id = form_data['caterer_id']
+        caterer_data = get_caterer_food_cate_for_event(caterer_id)
+        caterer_details = []
+        for caterer in caterer_data:
+            data = {'id': caterer.caterer_id, 'charges': caterer.charges,
+                    'food_category': caterer.caterer_get_foodcategory.food_type,
+                    'food_type_id': caterer.food_category_id}
+            caterer_details.append(data)
+    return jsonify({'caterer_details': caterer_details})
+
+
+def get_decorator_details():
+    if request.method == "POST":
+        form_data = request.get_json()
+        decorator_id = form_data['decorator_id']
+        decorator_data = get_decor_types_for_event(decorator_id)
+        decorator_details = []
+        for decorator in decorator_data:
+            data = {'id': decorator.decorator_id, 'charges': decorator.charges,
+                    'decoration_type': decorator.decorator_get_decorationType.decoration_type,
+                    'decoration_type_id': decorator.decoration_type_id}
+            decorator_details.append(data)
+    return jsonify({'decorator_details': decorator_details})
 
 
 def getVenueDetails():

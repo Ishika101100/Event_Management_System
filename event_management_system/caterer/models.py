@@ -18,12 +18,14 @@ class Caterer(db.Model):
     def __repr__(self):
         return self.id
 
+
 class FoodCategory(db.Model):
     """Add food category in the database"""
     __tablename__ = "food_category"
     id = db.Column(db.Integer, primary_key=True)
     food_type = db.Column(db.String)
     caterer = db.relationship("CatererGetFoodCategory", backref='caterer_get_foodcategory', lazy=True)
+
 
 class CatererGetFoodCategory(db.Model):
     """Mapping table of caterer and food category"""
@@ -35,31 +37,43 @@ class CatererGetFoodCategory(db.Model):
     caterer_id = db.Column(db.Integer, db.ForeignKey('caterer.id'))
     charges = db.Column(db.Integer)
 
+
 def save_caterer(user_id):
     caterer = Caterer(user_id=user_id)
     db.session.add(caterer)
     db.session.commit()
     return caterer
 
+
 def get_caterer_for_venue(user_id):
     return Caterer.query.filter_by(user_id=user_id).first()
+
 
 def get_current_caterer():
     return Caterer.query.filter_by(user_id=current_user.id).first()
 
+
 def get_food_category(food_type):
     return FoodCategory(food_type=food_type)
 
-def get_food_charges(caterer_id,food_category_id,charges):
+
+def get_food_charges(caterer_id, food_category_id, charges):
     return CatererGetFoodCategory(caterer_id=caterer_id, food_category_id=food_category_id,
-                           charges=charges)
+                                  charges=charges)
+
 
 def get_caterer_query(caterer_id):
     return CatererGetFoodCategory.query.filter_by(caterer_id=caterer_id).all()
 
-def charge_query_for_caterer(caterer_id,food_category_id):
+
+def charge_query_for_caterer(caterer_id, food_category_id):
     return CatererGetFoodCategory.query.filter_by(caterer_id=caterer_id,
-                                                    food_category_id=food_category_id).first()
+                                                  food_category_id=food_category_id).first()
+
 
 def food_category_query(food_category_id):
     return FoodCategory.query.filter_by(id=food_category_id).first()
+
+
+def get_caterer_food_cate_for_event(caterer_id):
+    return CatererGetFoodCategory.query.filter_by(caterer_id=caterer_id).all()

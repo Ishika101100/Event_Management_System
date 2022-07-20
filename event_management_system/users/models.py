@@ -46,8 +46,10 @@ def commit_function():
 def add_function(value):
     db.session.add(value)
 
+
 def delete_function(value):
-    db.session.add(value)
+    db.session.delete(value)
+
 
 def get_user_type():
     return UserType.query.all()

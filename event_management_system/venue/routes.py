@@ -5,7 +5,7 @@ from event_management_system.venue.services import get_checked_event, get_venue_
     get_venue_decorators_list, get_venue_request, get_venue_catrers_list, get_venue_caterer_request
 from event_management_system.venue.utils import is_venue
 
-venue = Blueprint('venue', __name__,template_folder='templates/venue')
+venue = Blueprint('venue', __name__, template_folder='templates/venue')
 
 
 @venue.route("/venue_check_event")

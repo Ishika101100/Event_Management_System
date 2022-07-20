@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 from event_management_system.users.validation import phone_number_validation, password_validation, validate_username, \
-    validate_email, validate_number, validate_email_exists
+    validate_email, validate_number, validate_email_exists, validate_update_username, validate_update_number
 
 
 class RegistrationForm(FlaskForm):
@@ -36,9 +36,10 @@ class LoginForm(FlaskForm):
 class UpdateAccountForm(FlaskForm):
     """Form for updating users' account"""
     username = StringField('Username',
-                           validators=[DataRequired(), Length(min=2, max=20), validate_username])
+                           validators=[DataRequired(), Length(min=2, max=20), validate_update_username])
     mobile_number = StringField('Mobile Number',
-                                validators=[DataRequired(), phone_number_validation, validate_number])
+                                validators=[DataRequired(), Length(min=10, max=10), phone_number_validation,
+                                            validate_update_number])
     address = TextAreaField("Address")
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     change_Password = SubmitField('Change Password')

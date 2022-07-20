@@ -6,7 +6,6 @@ from event_management_system.book_event.validation import validate_date
 
 
 class EventForm(FlaskForm):
-    """Form for Event Booking"""
     title = StringField('Title', validators=[DataRequired(), Length(min=2, max=20)])
     date = DateField('Date', validators=[DataRequired(), validate_date])
     start_time = TimeField('Start Time', validators=[DataRequired()])

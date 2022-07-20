@@ -94,3 +94,4 @@ def book_event_for_category_two(title, category, date, venue_id, caterer_id, sta
 
 def get_current_event():
     return Event.query.filter_by(user_id=current_user.id).all()
+

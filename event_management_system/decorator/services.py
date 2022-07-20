@@ -75,9 +75,8 @@ def get_update_category(decorator_id, decorator_type_id):
 
 def get_delete_category(decorator_id, decorator_type_id):
     form = AddCategoryForm()
-    charge = get_decor_charges(decorator_id=decorator_id,
-                               decoration_type_id=decorator_type_id)
-    category = get_decoration_category(id=decorator_type_id)
+    charge = get_decor_charges(decorator_id=decorator_id, decoration_type_id=decorator_type_id)
+    category = get_decoration_category(decorator_type_id=decorator_type_id)
     delete_function(charge)
     commit_function()
     delete_function(category)

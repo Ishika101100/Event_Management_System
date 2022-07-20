@@ -65,6 +65,8 @@ def user_account():
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.username = form.username.data
+        current_user.mobile_number = form.mobile_number.data
+        current_user.address = form.address.data
         commit_function()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('users.account'))
@@ -123,8 +125,10 @@ def get_change_password():
             flash("Incorrect Old Password", 'danger')
     return render_template('users/change_password.html', title='Change Password', form=form)
 
+
 def get_home():
     return render_template('users/home.html')
+
 
 def get_about():
     return render_template('users/about.html', title='About')

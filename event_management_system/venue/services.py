@@ -14,12 +14,13 @@ from event_management_system.venue.models import get_current_venue, get_venue, \
 def get_checked_event(is_approved_by_venue_value):
     venue = get_current_venue()
     event_detail = get_event_detail_for_venue(venue_id=venue.id, is_approved_by_venue=is_approved_by_venue_value)
-    if is_approved_by_venue_value==None:
+    if is_approved_by_venue_value == None:
         return render_template('venue_check_event.html', event_detail=event_detail)
-    elif is_approved_by_venue_value==True:
+    elif is_approved_by_venue_value == True:
         return render_template('venue_check_accepted_events.html', event_detail=event_detail)
     else:
         return render_template('venue_check_rejected_events.html', event_detail=event_detail)
+
 
 def get_venue_booking_request(event_id, check_venue_approval):
     event_obj = get_event_obj_for_venue(event_id)
@@ -61,9 +62,10 @@ def get_venue_decorators_list(is_approved_decorator_by_venue):
             decorator_mobile_number[decorator.id] = decorator.user.mobile_number
             decorator_address[decorator.id] = decorator.user.address
         if is_approved_decorator_by_venue == None:
-            return render_template('venue_decorators.html',venue_get_decorator_obj=venue_get_decorator_obj, decorator=decorator_username,
-                               decorator_mobile_number=decorator_mobile_number, decorator_email=decorator_email,
-                               decorator_address=decorator_address)
+            return render_template('venue_decorators.html', venue_get_decorator_obj=venue_get_decorator_obj,
+                                   decorator=decorator_username,
+                                   decorator_mobile_number=decorator_mobile_number, decorator_email=decorator_email,
+                                   decorator_address=decorator_address)
         elif is_approved_decorator_by_venue == True:
             return render_template('venue_accepted_decorators.html', venue_get_decorator_obj=venue_get_decorator_obj,
                                    decorator=decorator_username,
@@ -104,8 +106,8 @@ def get_venue_catrers_list(is_approved_caterer_by_venue):
             caterer_address[caterer.id] = caterer.user.address
         if is_approved_caterer_by_venue == None:
             return render_template('venue_catrers.html', caterer=caterer_username,
-                               caterer_mobile_number=caterer_mobile_number, caterer_email=caterer_email,
-                               caterer_address=caterer_address)
+                                   caterer_mobile_number=caterer_mobile_number, caterer_email=caterer_email,
+                                   caterer_address=caterer_address)
         elif is_approved_caterer_by_venue == True:
             return render_template('venue_accepted_caterers.html', caterer=caterer_username,
                                    caterer_mobile_number=caterer_mobile_number, caterer_email=caterer_email,

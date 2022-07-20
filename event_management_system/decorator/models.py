@@ -72,3 +72,7 @@ def get_decoration_category(decorator_type_id):
 
 def get_decorator_type(decorator_id):
     return DecoratorGetTypes.query.filter_by(decorator_id=decorator_id).all()
+
+
+def get_decor_types_for_event(decorator_id):
+    return DecoratorGetTypes.query.filter_by(decorator_id=decorator_id).all()

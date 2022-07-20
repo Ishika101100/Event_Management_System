@@ -5,7 +5,7 @@ from event_management_system.caterer.services import get_event, get_venues, get_
     get_caterer_category, get_view_food_category, get_update_category_for_caterer, get_delete_category_for_caterer
 from event_management_system.caterer.utils import is_caterer
 
-caterer = Blueprint('caterer', __name__,template_folder='templates/caterer')
+caterer = Blueprint('caterer', __name__, template_folder='templates/caterer')
 
 
 @caterer.route("/caterer_check_event")
@@ -55,7 +55,6 @@ def update_category(caterer_id, food_category_id):
 
 @caterer.route("/delete_caterer_category/<caterer_id>/<food_category_id>", methods=['GET', 'POST'])
 @login_required
-
 def delete_category(caterer_id, food_category_id):
     """Caterer can delete category"""
-    get_delete_category_for_caterer(caterer_id, food_category_id)
+    return get_delete_category_for_caterer(caterer_id, food_category_id)

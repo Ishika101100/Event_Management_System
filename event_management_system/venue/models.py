@@ -99,43 +99,55 @@ def get_venue_get_caterer_obj(is_approved_caterer_by_venue):
 def get_venue_caterer_query(venue, caterer_id):
     return VenueGetCaterer.query.filter_by(venue_id=venue, caterer_id=caterer_id).first()
 
-def venue_get_caterer_obj_for_caterer(caterer_id,is_approved_caterer):
-    return VenueGetCaterer.query.filter_by(caterer_id=caterer_id).filter_by(
-        is_approved_caterer=is_approved_caterer).with_entities(VenueGetCaterer.venue_id, VenueGetCaterer.is_approved_caterer).all()
 
-def venue_get_caterer_query(venue_id,caterer_id):
+def venue_get_caterer_obj_for_caterer(caterer_id, is_approved_caterer):
+    return VenueGetCaterer.query.filter_by(caterer_id=caterer_id).filter_by(
+        is_approved_caterer=is_approved_caterer).with_entities(VenueGetCaterer.venue_id,
+                                                               VenueGetCaterer.is_approved_caterer).all()
+
+
+def venue_get_caterer_query(venue_id, caterer_id):
     return VenueGetCaterer(venue_id=venue_id, caterer_id=caterer_id)
+
 
 def get_venue_for_event(event_type_id):
     return Venues.query.join(EventCategory, Venues.venue_type == event_type_id).filter(
-            Venues.venue_type == EventCategory.id).all()
+        Venues.venue_type == EventCategory.id).all()
+
 
 def get_venue_data_for_event(venue_id):
     return Venues.query.filter_by(id=venue_id).first()
 
+
 def venue_get_caterer_for_event(venue_id):
     return VenueGetCaterer.query.join(Caterer, VenueGetCaterer.caterer_id == Caterer.id).filter(
-            VenueGetCaterer.caterer_id == Caterer.id).filter(VenueGetCaterer.venue_id == venue_id).filter(
-            VenueGetCaterer.is_approved_caterer == True).all()
+        VenueGetCaterer.caterer_id == Caterer.id).filter(VenueGetCaterer.venue_id == venue_id).filter(
+        VenueGetCaterer.is_approved_caterer == True).all()
+
 
 def caterer_query_for_event(caterer_id):
     return VenueGetCaterer.query.filter_by(caterer_id=caterer_id).first()
 
+
 def venue_get_decorator_for_event(venue_id):
     return VenueGetDecorator.query.join(Decorator, VenueGetDecorator.decorator_id == Decorator.id).filter(
-            VenueGetDecorator.decorator_id == Decorator.id).filter(VenueGetDecorator.venue_id == venue_id).filter(
-            VenueGetDecorator.is_approved_decorator == True).all()
+        VenueGetDecorator.decorator_id == Decorator.id).filter(VenueGetDecorator.venue_id == venue_id).filter(
+        VenueGetDecorator.is_approved_decorator == True).all()
+
 
 def decorator_query_for_event(decorator_id):
     return VenueGetDecorator.query.filter_by(decorator_id=decorator_id).first()
+
 
 def book_event_get_venue_query():
     return Venues.query.join(EventCategory, Venues.venue_type == EventCategory.id).filter(
         Venues.venue_type == EventCategory.id).all()
 
+
 def get_caterer_query_for_event():
     return VenueGetCaterer.query.join(Caterer, VenueGetCaterer.caterer_id == Caterer.id).filter(
         VenueGetCaterer.caterer_id == Caterer.id).all()
+
 
 def get_decorator_for_event():
     return VenueGetDecorator.query.join(Decorator, VenueGetDecorator.decorator_id == Decorator.id).filter(
