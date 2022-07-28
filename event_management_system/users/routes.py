@@ -1,57 +1,67 @@
 from flask import Blueprint
 from flask_login import login_required
 
-from event_management_system.users.services import register_user, signin_user, log_user_out, user_account, \
-    get_reset_request, get_reset_token, get_change_password, get_home, get_about
+from event_management_system.users.services import UserClass
 
 users = Blueprint('users', __name__, template_folder='templates', static_folder='static/users')
+
+user_obj = UserClass()
 
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
-    return register_user()
+    """
+    user gets registration form for creating an account
+    """
+    return user_obj.register_user()
 
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
-    return signin_user()
+    """user is able to log in into the website"""
+    return user_obj.signin_user()
 
 
 @users.route("/logout")
 def logout():
-    return log_user_out()
+    """user can logout from the website"""
+    return user_obj.log_user_out()
 
 
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-    return user_account()
+    """user is able to see his account details"""
+    return user_obj.user_account()
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
-    return get_reset_request()
+    """user can reset password if he/she forgot his old password"""
+    return user_obj.get_reset_request()
 
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_token(token):
-    return get_reset_token(token)
+    """a token is sent to user's email for resetting the password"""
+    return user_obj.get_reset_token(token)
 
 
 @users.route("/change_password", methods=['GET', 'POST'])
 @login_required
 def change_password():
-    return get_change_password()
+    """user can change his/her password for logging into the website"""
+    return user_obj.get_change_password()
 
 
 @users.route("/")
 @users.route("/home")
 def home():
     """returns home page"""
-    return get_home()
+    return user_obj.get_home()
 
 
 @users.route("/about")
 def about():
     """returns about page"""
-    return get_about()
+    return user_obj.get_about()

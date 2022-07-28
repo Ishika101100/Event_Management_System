@@ -8,6 +8,7 @@ from flask_login import current_user
 from flask_mail import Message
 
 from event_management_system import mail, bcrypt
+from event_management_system.users.constants import IF_NOT_USER_MESSAGE
 
 
 def save_picture(form_picture):
@@ -48,7 +49,7 @@ def is_user(f):
     def wrapped(*args, **kwargs):
         if current_user.user_type == 1:
             return f()
-        flash("Only users can access this page", "warning")
+        flash(IF_NOT_USER_MESSAGE, "warning")
         return redirect(url_for('main.home'))
 
     return wrapped

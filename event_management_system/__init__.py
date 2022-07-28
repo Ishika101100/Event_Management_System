@@ -4,7 +4,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 
-from event_management_system.config import Config
+from config import Config
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
